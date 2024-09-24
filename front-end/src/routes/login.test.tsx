@@ -13,6 +13,7 @@ beforeAll(() => {
   window.alert = vi.fn();
   window.scrollTo = vi.fn();
 });
+
 describe("test index page", () => {
   it("should render component", () => {
     const screen = render(<LoginPage />);
