@@ -3,7 +3,6 @@ import LoginPage from "./login.tsx";
 import { type Mock } from "vitest";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 
 vi.mock("axios");
 vi.mock("react-router-dom", () => ({
@@ -14,14 +13,8 @@ beforeAll(() => {
   window.alert = vi.fn();
   window.scrollTo = vi.fn();
 });
-
-// beforeEach(() => {
-//   const mockNavigate = vi.fn();
-//   (useNavigate as Mock).mockReturnValue(mockNavigate);
-// });
-
 describe("test index page", () => {
-  test("render component", () => {
+  it("should render component", () => {
     const screen = render(<LoginPage />);
 
     // title
@@ -36,7 +29,7 @@ describe("test index page", () => {
     expect(screen.getByText("Login")).toBeInTheDocument();
   });
 
-  test("validate form", async () => {
+  it("should validate form", async () => {
     const screen = render(<LoginPage />);
 
     fireEvent.click(screen.getByText("Login"));
@@ -50,7 +43,7 @@ describe("test index page", () => {
     });
   });
 
-  test("submit form success", async () => {
+  it("should submit form success", async () => {
     const mockNavigate = vi.fn();
     (useNavigate as Mock).mockReturnValue(mockNavigate);
     (axios.post as Mock).mockReturnValue({ data: "test" });
@@ -76,7 +69,7 @@ describe("test index page", () => {
     });
   });
 
-  test("submit form error", async () => {
+  it("should submit form error", async () => {
     (axios.post as Mock).mockRejectedValue(new Error("api error"));
 
     const screen = render(<LoginPage />);
