@@ -5,11 +5,16 @@ import "./index.css";
 
 import Index from "./routes/index";
 import Login from "./routes/login";
+import AuthLayout from "./components/layout/AuthLayout";
 
 const router = createHashRouter([
   {
     path: "/",
-    element: <Index />,
+    element: (
+      <AuthLayout>
+        <Index />
+      </AuthLayout>
+    ),
   },
   {
     path: "/login",
