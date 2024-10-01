@@ -121,20 +121,9 @@ router.get(
   "/auth/user",
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const token = req.headers.authorization?.split(" ")[1];
-
-      const decodedToken = jwt.verify(
-        token as string,
-        process.env.JWT_SECRET as string
-      ) as { id: number; email: string; createdAt: string; updatedAt: string };
-
-      return res.status(200).json({
-        user: decodedToken,
-      });
-    } catch (error) {
-      next(error);
-    }
+    return res.status(200).json({
+      user: req.user,
+    });
   }
 );
 

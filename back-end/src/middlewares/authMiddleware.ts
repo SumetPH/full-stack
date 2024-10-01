@@ -10,10 +10,17 @@ export const authMiddleware = async (
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
       if (token) {
-        jwt.verify(token, process.env.JWT_SECRET as string, (err) => {
+        jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
           if (err) {
             throw new Error("invalid token");
           } else {
+            const user = decoded as {
+              id: number;
+              email: string;
+              createdAt: string;
+              updatedAt: string;
+            };
+            req.user = user;
             next();
           }
         });
