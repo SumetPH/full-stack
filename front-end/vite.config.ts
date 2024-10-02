@@ -11,7 +11,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./vitest.setup.ts",
     coverage: {
-      include: ["src/routes/**"],
+      include: ["src/routes/**", "src/components/**"],
     },
   },
 });

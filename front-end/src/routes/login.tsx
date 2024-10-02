@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
 import swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import useAxios from "axios-hooks";
 
 type FormData = {
   email: string | undefined;
@@ -26,18 +26,37 @@ export default function LoginPage() {
     },
   });
 
+  const [_, loginExecute] = useAxios<{ token: string }>(
+    {
+      url: `${import.meta.env.VITE_APP_API}/auth/login`,
+      method: "POST",
+    },
+    {
+      manual: true,
+    }
+  );
+
   const submit: SubmitHandler<FormData> = async (data) => {
     try {
-      await axios.post("https://jsonplaceholder.typicode.com/posts", data);
+      const res = await loginExecute({
+        data: data,
+      });
 
-      swal
-        .fire({
-          icon: "success",
-          title: "Login Success",
-        })
-        .then(() => {
-          navigate("/");
-        });
+      if (res.status !== 200) {
+        throw new Error("Login Failed");
+      } else {
+        swal
+          .fire({
+            icon: "success",
+            title: "Login Success",
+          })
+          .then((result) => {
+            if (result.isConfirmed || result.isDismissed) {
+              localStorage.setItem("token", res.data.token);
+              navigate("/");
+            }
+          });
+      }
     } catch (error) {
       console.error(error);
       swal.fire({
@@ -46,6 +65,10 @@ export default function LoginPage() {
       });
     }
   };
+
+  if (localStorage.getItem("token")) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="container mx-auto ">
